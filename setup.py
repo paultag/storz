@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from monomoy import __appname__, __version__
+from storz import __appname__, __version__
 from setuptools import setup
 
 long_description = open('README.md', 'r').read()
