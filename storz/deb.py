@@ -2,6 +2,7 @@
 # and conditions of the GPL-2+.
 
 from debian.debfile import DebFile
+from firehose.report import DebianBinary, DebianSource
 
 
 def generate_sut_from_deb(path):
@@ -13,5 +14,4 @@ def generate_sut_from_deb(path):
     if "-" in version:
         version, local = version.rsplit("-", 1)
     name, arch = [control[x] for x in ['Package', 'Architecture']]
-
-    # XXX: Implement SUT generation with name, version, release, arch
+    return DebianBinary(name, version, local, arch)
