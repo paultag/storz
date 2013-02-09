@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-from storz.deb import generate_sut_from_debfile
+from storz.wrapper import generate_analysis
 import sys
 
-print generate_sut_from_debfile(sys.argv[1])
+
+obj = generate_analysis('lintian', '1.0', sys.argv[1])
+print obj
