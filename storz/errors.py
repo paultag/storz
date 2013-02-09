@@ -1,0 +1,4 @@
+
+
+class StorsError(Exception):
+    pass
