@@ -1,4 +1,4 @@
 
 
-class StorsError(Exception):
+class StorzError(Exception):
     pass

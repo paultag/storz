@@ -4,7 +4,7 @@
 
 import os.path
 
-from storz.errors import StorsError
+from storz.errors import StorzError
 
 from debian.deb822 import Dsc
 from debian.debfile import DebFile
@@ -54,11 +54,11 @@ def generate_sut_from_dsc(path):
     return DebianSource(source, version, local)
 
 
-class StorzUnknownExtentionError(StorsError):
+class StorzUnknownExtentionError(StorzError):
     pass
 
 
-class StorzNoSuchFile(StorsError):
+class StorzNoSuchFile(StorzError):
     pass
 
 
