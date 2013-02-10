@@ -15,7 +15,7 @@ setup(
     author_email="paultag@debian.org",
     long_description=long_description,
     description='interfaces with firehose',
-    license="Expat",
+    license="LGPLv2.1+",
     url="",
     platforms=['any']
 )
