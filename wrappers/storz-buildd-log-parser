@@ -12,6 +12,9 @@ import re
 
 path = sys.argv[1]
 
+if path.startswith("./"):
+    path = path[2:]
+
 _, name, version, basename = path.split("/")
 arch, _ = basename.split("_", 1)
 local = None
@@ -50,9 +53,11 @@ for line in fd.readlines():
 
 fd.seek(0)
 
-print fgcc.parse_file(
+obj = fgcc.parse_file(
     fd,
     sut=sut,
     gccversion=gccversion,
     stats=stats
-).to_xml_str()
+)
+
+print obj
