@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+# Copyright (c) Paul R. Tagliamonte <paultag@debian.org>, 2013 under the
+# terms and conditions of storz it's self.
+
+from firehose.report import DebianBinary, Stats
+import firehose.parsers.gcc as fgcc
+
+from datetime import timedelta
+import sys
+import re
+
+
+path = sys.argv[1]
+
+_, name, version, basename = path.split("/")
+arch, _ = basename.split("_", 1)
+local = None
+if "-" in version:
+    version, local = version.rsplit("-", 1)
+
+sut = DebianBinary(name, version, local, arch)
+
+fd = open(path, 'r')
+
+
+STATS = re.compile("Build needed (?P<time>.*), (?P<space>.*) dis(c|k) space")
+gccversion = None
+stat = None
+
+for line in fd.readlines():
+    flag = "Toolchain package versions: "
+
+    stat = STATS.match(line)
+    if stat:
+        info = stat.groupdict()
+        hours, minutes, seconds = [int(x) for x in info['time'].split(":")]
+        timed = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+        stats = Stats(timed.total_seconds())
+
+    if line.startswith(flag):
+        line = line[len(flag):].strip()
+        packages = line.split(" ")
+        versions = {}
+        for package in packages:
+            b, bv = package.split("_", 1)
+            versions[b] = bv
+
+        vs = filter(lambda x: x.startswith("gcc"), versions)[0]
+        gccversion = versions[vs]
+
+fd.seek(0)
+
+print fgcc.parse_file(
+    fd,
+    sut=sut,
+    gccversion=gccversion,
+    stats=stats
+).to_xml_str()
