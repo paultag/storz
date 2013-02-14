@@ -35,6 +35,33 @@ LINTLINE = re.compile(r"(?P<package>.*) (?P<type>(binary|source)) "
 
 curpackage = None
 sut = None
+ana = None
+
+
+def _gen_ana(sut):
+    return Analysis(
+        metadata=Metadata(
+            generator=Generator(name='lintian', version='unknown'),
+            sut=sut,
+            file_=None,
+            stats=None),
+        results=[])
+
+
+def _dump_ana():
+    if ana is None:
+        return
+    sut = ana.metadata.sut
+    fpath = "%s_%s" % (sut.name, sut.version)
+
+    if sut.release:
+        fpath += "-%s" % (sut.release)
+
+    if hasattr(sut, 'arch'):
+        fpath += ".%s" % (sut.arch)
+
+    print fpath
+    open(fpath, 'w').write(ana.to_xml_str())
 
 
 for line in fd.readlines():
@@ -47,7 +74,10 @@ for line in fd.readlines():
     tag, line = [x.strip() for x in line.split(":", 1)]
     if tag == 'N':
         if line == '----':
+            _dump_ana()
+
             curpackage = None
+            ana = None
             sut = None
             continue
         match = PACKAGE.match(line)
@@ -63,6 +93,8 @@ for line in fd.readlines():
             sut = DebianSource(name, version, release)
         else:
             sut = DebianBinary(name, version, release, obj['arch'])
+
+        ana = _gen_ana(sut)
         continue
 
     try:
@@ -84,3 +116,4 @@ for line in fd.readlines():
                       message=Message(text=obj['msg']),
                       notes=None,
                       trace=None)
+        ana.results.append(issue)
