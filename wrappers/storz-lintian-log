@@ -60,6 +60,8 @@ def _dump_ana():
     if hasattr(sut, 'arch'):
         fpath += ".%s" % (sut.arch)
 
+    fpath += ".firehose.xml"
+
     print fpath
     open(fpath, 'w').write(ana.to_xml_str())
 
