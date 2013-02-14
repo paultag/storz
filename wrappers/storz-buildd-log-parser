@@ -28,7 +28,7 @@ fd = open(path, 'r')
 
 STATS = re.compile("Build needed (?P<time>.*), (?P<space>.*) dis(c|k) space")
 gccversion = None
-stat = None
+stats = None
 
 for line in fd.readlines():
     flag = "Toolchain package versions: "
@@ -45,10 +45,18 @@ for line in fd.readlines():
         packages = line.split(" ")
         versions = {}
         for package in packages:
+            if "_" not in package:
+                continue
+
             b, bv = package.split("_", 1)
             versions[b] = bv
 
-        vs = filter(lambda x: x.startswith("gcc"), versions)[0]
+        vs = filter(lambda x: x.startswith("gcc"), versions)
+
+        if vs == []:
+            continue
+
+        vs = vs[0]
         gccversion = versions[vs]
 
 fd.seek(0)
@@ -60,4 +68,4 @@ obj = fgcc.parse_file(
     stats=stats
 )
 
-print obj
+print obj.to_xml_str()
