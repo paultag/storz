@@ -4,8 +4,10 @@
 
 from firehose.report import DebianBinary, Stats
 import firehose.parsers.gcc as fgcc
+from storz.store import store
 
 from datetime import timedelta
+from bz2 import BZ2File
 import sys
 import re
 
@@ -23,7 +25,8 @@ if "-" in version:
 
 sut = DebianBinary(name, version, local, arch)
 
-fd = open(path, 'r')
+fd = BZ2File(path, 'r')
+#fd = open(path, 'r')
 
 
 STATS = re.compile("Build needed (?P<time>.*), (?P<space>.*) dis(c|k) space")
@@ -68,4 +71,5 @@ obj = fgcc.parse_file(
     stats=stats
 )
 
+store(obj)
 print obj.to_xml_str()
