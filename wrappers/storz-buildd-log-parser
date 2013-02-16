@@ -17,7 +17,7 @@ path = sys.argv[1]
 if path.startswith("./"):
     path = path[2:]
 
-_, name, version, basename = path.split("/")
+name, version, basename = path.split("/")
 arch, _ = basename.split("_", 1)
 local = None
 if "-" in version:
