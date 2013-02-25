@@ -8,11 +8,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PATH="$PATH:${DIR}/../wrappers/"
 
 for file in `find . -name "*bz2"`; do
-    echo $file
-    if [ -e $file.firehose.xml ]; then
-        echo "  -> skipping"
-    else
-        storz-buildd-log-parser $file > $file.firehose.xml
-        sleep 0.1
-    fi
+    storz-buildd-log-parser $file
+    sleep 0.1
 done

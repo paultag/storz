@@ -9,6 +9,7 @@ from storz.store import store
 from datetime import timedelta
 from bz2 import BZ2File
 import sys
+import os
 import re
 
 
@@ -16,6 +17,12 @@ path = sys.argv[1]
 
 if path.startswith("./"):
     path = path[2:]
+
+file_flag = "%s.firehose" % (path)
+
+if os.path.exists(file_flag):
+    print "Skipping"
+    sys.exit(1)
 
 name, version, basename = path.split("/")
 arch, _ = basename.split("_", 1)
@@ -72,4 +79,6 @@ obj = fgcc.parse_file(
 )
 
 store(obj)
-print obj.to_xml_str()
+open(file_flag, 'w').close()
+
+print "Writted"
