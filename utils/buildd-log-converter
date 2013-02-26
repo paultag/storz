@@ -9,5 +9,4 @@ PATH="$PATH:${DIR}/../wrappers/"
 
 for file in `find . -name "*bz2"`; do
     storz-buildd-log-parser $file
-    sleep 0.1
 done
