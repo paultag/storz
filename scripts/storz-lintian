@@ -9,12 +9,13 @@ from storz.wrapper import generate_analysis
 from firehose.report import Issue, Message, File, Location
 
 import sys
+import os
 
 
 mapping = {
     "I": "info",
     "W": "warning",
-    "P": "pedantic-nitpick",
+    "P": "pedantic",
     "E": "error",
     "X": "experimental",
     "N": "note"
@@ -54,9 +55,10 @@ def do_lint(fpath):
             package, _ = package.rsplit(" ", 1)
             # package = "src:%s" % (package)
 
+        pth = os.path.basename(fpath)
         analysis.results.append(Issue(cwe=None,
                                       testid=testid,
-                                      location=Location(file=File(fpath, None),
+                                      location=Location(file=File(pth, None),
                                                         function=None,
                                                         point=None),
                                       severity=severity,
