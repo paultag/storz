@@ -22,9 +22,9 @@ mapping = {
 }
 
 
-def do_lint(fpath):
+def do_lint(fpath, tool="lintian"):
     stdout, stderr, exit = run_command([
-        "lintian",
+        tool,
         "--version"
     ])
 
@@ -33,10 +33,10 @@ def do_lint(fpath):
         raise Exception("Unknown version of Lintian.")
     version = lines[0].split(" ", 1)[1][1:]
 
-    analysis = generate_analysis('lintian', version, fpath)
+    analysis = generate_analysis(tool, version, fpath)
 
     stdout, stderr, exit = run_command([
-        "lintian",
+        tool,
         "-IE",
         "--pedantic",
         fpath
@@ -68,9 +68,11 @@ def do_lint(fpath):
     return analysis
 
 
-if len(sys.argv) >= 2:
-    obj = do_lint(sys.argv[1])
-    print obj.to_xml_bytes()
-else:
-    print "Error in usage."
-    sys.exit(1)
+sys.argv.pop(0)  # exe name
+fpath = sys.argv.pop(0)
+tool = "lintian"
+if sys.argv != []:
+    tool = sys.argv.pop(0)
+
+obj = do_lint(fpath, tool=tool)
+print obj.to_xml_bytes()
