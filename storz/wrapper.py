@@ -2,7 +2,7 @@
 # and conditions of the LGPLv2.1+
 # -*- coding: utf-8 -*-
 
-from firehose.report import Analysis, Generator, Metadata
+from firehose.model import Analysis, Generator, Metadata
 from storz.deb import generate_sut_from_debfile
 
 

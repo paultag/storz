@@ -6,7 +6,7 @@
 from storz.utils import run_command
 from storz.wrapper import generate_analysis
 
-from firehose.report import Issue, Message, File, Location
+from firehose.model import Issue, Message, File, Location
 
 import sys
 import os
@@ -28,7 +28,7 @@ def do_lint(fpath, tool="lintian"):
         "--version"
     ])
 
-    lines = stdout.splitlines()
+    lines = [x.decode('utf-8') for x in stdout.splitlines()]
     if lines == []:
         raise Exception("Unknown version of Lintian.")
     version = lines[0].split(" ", 1)[1][1:]
@@ -75,4 +75,4 @@ if sys.argv != []:
     tool = sys.argv.pop(0)
 
 obj = do_lint(fpath, tool=tool)
-print obj.to_xml_bytes()
+print(obj.to_xml_bytes())

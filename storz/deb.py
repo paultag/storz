@@ -9,7 +9,7 @@ from storz.errors import StorzError
 from debian.deb822 import Dsc
 from debian.debfile import DebFile
 
-from firehose.report import DebianBinary, DebianSource
+from firehose.model import DebianBinary, DebianSource
 
 
 def parse_version(version):
