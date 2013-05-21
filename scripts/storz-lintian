@@ -76,4 +76,4 @@ if sys.argv != []:
     tool = sys.argv.pop(0)
 
 obj = do_lint(fpath, tool=tool)
-print(obj.to_xml_bytes())
+sys.stdout.write(obj.to_xml_bytes().decode('utf-8'))
