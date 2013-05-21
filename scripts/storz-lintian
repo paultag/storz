@@ -43,6 +43,7 @@ def do_lint(fpath, tool="lintian"):
     ])
 
     for line in stdout.splitlines():
+        line = line.decode('utf-8')
         sev, package, fullmsg = line.split(": ", 2)
 
         try:
